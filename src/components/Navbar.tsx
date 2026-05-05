@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { type MouseEvent, useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 import { NAV_SCROLL_SHOW_DOWNLOAD_PX, navCopy } from "@/content/site-copy";
@@ -12,12 +12,38 @@ export const Navbar = () => {
   const [scrollY, setScrollY] = useState(0);
   const [downloadInView, setDownloadInView] = useState(true);
   const [auxNavFocus, setAuxNavFocus] = useState(false);
+  /** Синхронные копии для обработчика scroll (иначе там устаревший closure). */
+  const downloadInViewRef = useRef(true);
+  const auxNavFocusRef = useRef(false);
+  const prevScrollYRef = useRef<number | null>(null);
+  /** Предыдущее значение IntersectionObserver по #download — для детекта «снова вошли в герой». */
+  const downloadWasInView = useRef(true);
+
+  useEffect(() => {
+    downloadInViewRef.current = downloadInView;
+  }, [downloadInView]);
+  useEffect(() => {
+    auxNavFocusRef.current = auxNavFocus;
+  }, [auxNavFocus]);
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
+      const prev = prevScrollYRef.current;
+      const scrollingUp = prev !== null && y < prev;
+      prevScrollYRef.current = y;
+
       setScrolled(y > 12);
       setScrollY(y);
+
+      if (
+        auxNavFocusRef.current &&
+        downloadInViewRef.current &&
+        y < NAV_SCROLL_SHOW_DOWNLOAD_PX &&
+        scrollingUp
+      ) {
+        setAuxNavFocus(false);
+      }
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -43,10 +69,13 @@ export const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    if (downloadInView && scrollY < NAV_SCROLL_SHOW_DOWNLOAD_PX) {
+    /** Снова видим #download после того как уходил (например тянем страницу вверх с секции). */
+    const reEnteredHeroDownload = downloadInView && !downloadWasInView.current;
+    downloadWasInView.current = downloadInView;
+    if (reEnteredHeroDownload) {
       setAuxNavFocus(false);
     }
-  }, [downloadInView, scrollY]);
+  }, [downloadInView]);
 
   const showHeaderAside =
     !downloadInView || scrollY >= NAV_SCROLL_SHOW_DOWNLOAD_PX || auxNavFocus;
@@ -54,6 +83,7 @@ export const Navbar = () => {
   const handleBrandClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname !== "/") return;
     e.preventDefault();
+    setAuxNavFocus(false);
     if (location.hash) {
       window.history.replaceState(null, "", `${location.pathname}${location.search}`);
     }
