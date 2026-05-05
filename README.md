@@ -1,3 +1,5 @@
-# Welcome to your Lovable project
+# ZAPRET
 
-TODO: Document your project here
+Одностраничный сайт про **Zapret GUI** — программу-обёртку над утилитой zapret-discord-youtube с автоподбором для разблокировки доступа к YouTube и Discord.
+
+Здесь можно скачать сборку под Windows, перейти в репозиторий и заглянуть в Telegram-канал с новостями.

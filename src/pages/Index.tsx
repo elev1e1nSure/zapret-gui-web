@@ -2,13 +2,21 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ChevronDown, Github, Send, Download as DownloadIcon } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
+import { useLatestZapretGuiVersion } from "@/hooks/use-latest-zapret-gui-version";
+import { motionEase } from "@/lib/motion";
+import {
+  AUTHOR_GITHUB_URL,
+  DOWNLOAD_EXE_URL,
+  REPO_GUI_APP,
+  REPO_ZAPRET_DISCORD_YT,
+  TELEGRAM_NEWS_URL,
+} from "@/lib/site";
+import { footerCopy, heroCopy } from "@/content/site-copy";
 import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
-import { AmbientBackground } from "@/components/AmbientBackground";
-
-const ease = [0.22, 1, 0.36, 1] as const;
 
 const Index = () => {
+  const { label: releaseVersionLabel, status: releaseVersionStatus } = useLatestZapretGuiVersion();
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -18,8 +26,7 @@ const Index = () => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden">
-      <AmbientBackground />
+    <main className="relative min-h-screen">
       <Navbar />
 
       {/* HERO */}
@@ -33,57 +40,64 @@ const Index = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.2, ease }}
-            className="text-[11px] tracking-[0.2em] text-soft/70 mb-8 font-mono"
+            transition={{ duration: 1.2, ease: motionEase }}
+            className={`text-[13px] md:text-[0.875rem] tracking-[0.18em] text-muted-foreground font-mono mb-8 ${
+              releaseVersionStatus === "loading" ? "animate-pulse" : ""
+            } ${releaseVersionStatus === "error" ? "opacity-60" : ""}`}
+            title={releaseVersionStatus === "error" ? heroCopy.versionFetchErrorTitle : undefined}
           >
-            v1.0
+            {releaseVersionLabel}
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, ease, delay: 0.1 }}
+            transition={{ duration: 1.1, ease: motionEase, delay: 0.1 }}
             className="text-7xl md:text-[10rem] font-black tracking-[-0.04em] leading-none text-center"
           >
-            ZAPRET
+            {heroCopy.title}
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease, delay: 0.25 }}
+            transition={{ duration: 1, ease: motionEase, delay: 0.25 }}
             className="text-soft text-base md:text-lg max-w-md mx-auto mt-6 text-center leading-relaxed"
           >
-            GUI-обёртка для обхода блокировок Discord и YouTube.
-            Один клик вместо bat-файлов.
+            {heroCopy.subtitleBeforeBreak} {heroCopy.subtitleAfterBreak}
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease, delay: 0.4 }}
+            transition={{ duration: 1, ease: motionEase, delay: 0.4 }}
             className="flex flex-wrap items-center justify-center gap-3 mt-10"
           >
             <a
-              href="#"
+              id="download"
+              href={DOWNLOAD_EXE_URL}
               className="btn-lift group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background font-medium"
             >
               <DownloadIcon className="size-4 transition-transform duration-500 group-hover:-translate-y-0.5" strokeWidth={2} />
-              Скачать для Windows
+              {heroCopy.downloadWindows}
             </a>
             <a
-              href="#"
+              href={REPO_GUI_APP}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-lift inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
             >
               <Github className="size-4" strokeWidth={2} />
-              GitHub
+              {heroCopy.heroGithub}
             </a>
             <a
-              href="#"
+              href={TELEGRAM_NEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-lift inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
             >
               <Send className="size-4" strokeWidth={2} />
-              Telegram
+              {heroCopy.heroTelegram}
             </a>
           </motion.div>
         </motion.div>
@@ -101,8 +115,59 @@ const Index = () => {
       <Features />
       <HowItWorks />
 
-      <footer className="relative border-t border-border/60 py-10 text-center text-sm text-soft">
-        © 2026 ZAPRET · Open source GUI for zapret-discord-youtube
+      <footer className="relative mt-4 bg-muted/25 pt-7 pb-4 text-center text-sm text-muted-foreground border-t border-border/15">
+        <div className="container mx-auto max-w-lg px-6 space-y-1.5">
+          <p className="leading-snug text-soft">
+            <span className="font-medium text-foreground/85">{footerCopy.copyright}</span>
+            <span className="mx-1.5 text-[1.05rem] font-medium leading-none text-muted-foreground/80 tabular-nums" aria-hidden>
+              ·
+            </span>
+            <span>
+              {footerCopy.createdByPrefix}{" "}
+              <a href={AUTHOR_GITHUB_URL} target="_blank" rel="noopener noreferrer" className="footer-link">
+                {footerCopy.authorName}
+              </a>
+            </span>
+          </p>
+          <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 leading-snug text-soft">
+            <a
+              href={REPO_GUI_APP}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-link inline-flex items-center gap-1.5"
+            >
+              <Github className="size-3.5 opacity-80 shrink-0" strokeWidth={2} aria-hidden />
+              {footerCopy.linkZapretGui}
+            </a>
+            <span className="text-[1.05rem] font-medium leading-none text-muted-foreground/80 tabular-nums" aria-hidden>
+              ·
+            </span>
+            <a
+              href={TELEGRAM_NEWS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-link inline-flex items-center gap-1.5"
+            >
+              <Send className="size-3.5 opacity-80 shrink-0" strokeWidth={2} aria-hidden />
+              {footerCopy.linkTelegramChannel}
+            </a>
+            <span className="text-[1.05rem] font-medium leading-none text-muted-foreground/80 tabular-nums" aria-hidden>
+              ·
+            </span>
+            <a
+              href={REPO_ZAPRET_DISCORD_YT}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-link inline-flex items-center gap-1.5 text-sm"
+            >
+              <Github className="size-3.5 opacity-80 shrink-0" strokeWidth={2} aria-hidden />
+              {footerCopy.linkCoreRepoLabel}
+            </a>
+          </p>
+          <p className="pt-1 text-[0.62rem] sm:text-[0.65rem] text-muted-foreground/35 max-w-md mx-auto leading-normal select-none">
+            {footerCopy.disclaimer}
+          </p>
+        </div>
       </footer>
     </main>
   );

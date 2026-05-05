@@ -1,17 +1,16 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { Zap, Shuffle, Cpu, Eye, Sparkles, ShieldCheck } from "lucide-react";
+import { Zap, Shuffle, Cpu, Eye, ShieldCheck, Sparkles } from "lucide-react";
+import { featuresSectionCopy } from "@/content/site-copy";
+import { motionEase } from "@/lib/motion";
 
-const items = [
-  { icon: Zap, title: "Автоподбор", desc: "Автоматически находит рабочую стратегию обхода без копания в конфигах." },
-  { icon: Shuffle, title: "Переключение стратегий", desc: "Мгновенный свитч между профилями — Discord, YouTube, кастом." },
-  { icon: Cpu, title: "Без bat-скриптов", desc: "Никаких чёрных консолей. Один клик — и всё работает." },
-  { icon: Eye, title: "Живой интерфейс", desc: "Минималистичные анимации и отзывчивый UI на Tauri." },
-  { icon: ShieldCheck, title: "Безопасно", desc: "Полностью локально. Не собирает данные, открытый исходный код." },
-  { icon: Sparkles, title: "Лёгковесно", desc: "Несколько мегабайт и почти нулевая нагрузка на систему." },
-];
+/** Порядок иконок должен совпадать с порядком `featuresSectionCopy.cards`. */
+const FEATURE_ICONS = [Zap, Shuffle, Cpu, Eye, ShieldCheck, Sparkles] as const;
 
-const ease = [0.22, 1, 0.36, 1] as const;
+const items = FEATURE_ICONS.map((icon, i) => {
+  const c = featuresSectionCopy.cards[i];
+  return { icon, title: c.title, desc: c.description };
+});
 
 export const Features = () => {
   const ref = useRef<HTMLElement>(null);
@@ -27,17 +26,17 @@ export const Features = () => {
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.9, ease }}
+        transition={{ duration: 0.9, ease: motionEase }}
         className="max-w-2xl mb-16"
       >
         <motion.p style={{ x: labelX }} className="text-xs uppercase tracking-[0.3em] text-soft mb-5">
-          — Возможности
+          {featuresSectionCopy.kicker}
         </motion.p>
         <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] leading-[1.05]">
-          Обход без боли.
+          {featuresSectionCopy.title}
         </h2>
         <p className="text-soft mt-5 text-lg leading-relaxed">
-          Всё, что раньше требовало терминала и десятка ключей — теперь в одном экране.
+          {featuresSectionCopy.lead}
         </p>
       </motion.div>
 
@@ -48,7 +47,7 @@ export const Features = () => {
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.8, ease, delay: i * 0.07 }}
+            transition={{ duration: 0.8, ease: motionEase, delay: i * 0.07 }}
             className="group glass lift-card rounded-2xl p-7 hover:border-foreground/30 cursor-default relative overflow-hidden"
           >
             {/* subtle hover spotlight */}

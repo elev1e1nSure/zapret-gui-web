@@ -1,0 +1,98 @@
+/**
+ * Тексты лендинга — правьте по желанию.
+ * Порядок карточек «Возможности» должен совпадать с порядком иконок в `Features.tsx`.
+ */
+
+export const NAV_SCROLL_SHOW_DOWNLOAD_PX = 220;
+
+export const navCopy = {
+  brand: "ZAPRET",
+  linkFeatures: "Возможности",
+  linkHowItWorks: "Как работает",
+  headerDownload: "Скачать",
+} as const;
+
+export const heroCopy = {
+  title: "ZAPRET",
+  subtitleBeforeBreak: "GUI-обёртка для обхода блокировок Discord и YouTube.",
+  subtitleAfterBreak: "Один клик вместо bat-файлов.",
+  downloadWindows: "Скачать для Windows",
+  heroGithub: "GitHub",
+  heroTelegram: "Telegram",
+  /** title на блоке версии при ошибке загрузки с GitHub */
+  versionFetchErrorTitle: "Не удалось получить версию с GitHub",
+} as const;
+
+export const featuresSectionCopy = {
+  kicker: "— Возможности",
+  title: "Обход без сложностей.",
+  lead: "Всё, что раньше требовало перебора десятков стратегий и сложной настройки — теперь в одном приложении.",
+  /**
+   * Карточки по порядку: Zap → Shuffle → Cpu → Eye → ShieldCheck → Sparkles
+   * (см. массив иконок в components/Features.tsx).
+   */
+  cards: [
+    {
+      title: "Автоподбор",
+      description: "Автоматически находит рабочую стратегию на вашем ПК без необходимости ручного подбора",
+    },
+    {
+      title: "Переключение стратегий",
+      description: "Переключайтесь между стратегиями парой кликов без перебора bat-файлов",
+    },
+    {
+      title: "Системный трей и автозагрузка",
+      description: "Настраиваемые системный трей и автозапуск при включении ПК",
+    },
+    {
+      title: "Живой интерфейс",
+      description: "Минималистичные анимации и отзывчивый UI на Tauri.",
+    },
+    {
+      title: "Безопасно",
+      description: "Полностью локально. Не собирает данные, открытый исходный код.",
+    },
+    {
+      title: "Лёгковесно",
+      description: "Весит меньше 10 МБ и практически не нагружает систему.",
+    },
+  ],
+} as const;
+
+export const howSectionCopy = {
+  kicker: "— Как это работает",
+  title: "Три шага",
+  steps: [
+    {
+      number: "01",
+      title: "Скачай",
+      description: "Полная портативность. Запускай откуда угодно, никаких зависимостей в системе.",
+    },
+    {
+      number: "02",
+      title: "Запусти",
+      description: "Открой приложение и запусти обход  — автоподбор сделает всё сам.",
+    },
+    {
+      number: "03",
+      title: "Пользуйся",
+      description: "Наслаждайся просмотром YouTube и общением в Discord без ограничений.",
+    },
+  ],
+} as const;
+
+export const footerCopy = {
+  copyright: "© 2026 ZAPRET GUI",
+  createdByPrefix: "Created by",
+  authorName: "elev1e1nSure",
+  linkZapretGui: "zapret-gui",
+  linkTelegramChannel: "Telegram Channel",
+  linkCoreRepoLabel: "zapret-discord-youtube",
+  disclaimer: "Not affiliated with Google or Discord.",
+} as const;
+
+export const notFoundCopy = {
+  code: "404",
+  message: "Oops! Page not found",
+  backHome: "Return to Home",
+} as const;

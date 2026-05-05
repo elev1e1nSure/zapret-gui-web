@@ -42,36 +42,35 @@ export const AmbientBackground = () => {
   );
 
   return (
-    <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 -z-10 pointer-events-none">
       <div className="absolute inset-0 bg-background" />
 
-      {/* breathing gradient washes that drift with scroll */}
       <motion.div
         style={{ y: y1, x: x1 }}
-        className="absolute -top-1/4 left-0 right-0 h-[85vh] will-change-transform"
+        className="absolute -top-[30%] -left-[28vw] w-[156vw] h-[95vh] will-change-transform"
       >
         <motion.div
-          className="size-full animate-[ambient-drift-1_18s_ease-in-out_infinite_alternate]"
+          className="h-full w-full animate-[ambient-drift-1_18s_ease-in-out_infinite_alternate]"
           style={{ background: bg1 }}
         />
       </motion.div>
 
       <motion.div
         style={{ y: y2, x: x2 }}
-        className="absolute top-1/3 left-0 right-0 h-[85vh] will-change-transform"
+        className="absolute top-[28%] -left-[28vw] w-[156vw] h-[95vh] will-change-transform"
       >
         <motion.div
-          className="size-full animate-[ambient-drift-2_22s_ease-in-out_infinite_alternate]"
+          className="h-full w-full animate-[ambient-drift-2_22s_ease-in-out_infinite_alternate]"
           style={{ background: bg2 }}
         />
       </motion.div>
 
       <motion.div
         style={{ y: y3 }}
-        className="absolute top-2/3 left-0 right-0 h-[80vh] will-change-transform"
+        className="absolute top-[58%] -left-[28vw] w-[156vw] h-[90vh] will-change-transform"
       >
         <motion.div
-          className="size-full animate-[ambient-drift-3_26s_ease-in-out_infinite_alternate]"
+          className="h-full w-full animate-[ambient-drift-3_26s_ease-in-out_infinite_alternate]"
           style={{ background: bg3 }}
         />
       </motion.div>
