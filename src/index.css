@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 14% 11%;
+    --foreground: 210 15% 94%;
+
+    --card: 220 13% 14%;
+    --card-foreground: 210 15% 94%;
+
+    --popover: 220 13% 14%;
+    --popover-foreground: 210 15% 94%;
+
+    --primary: 210 15% 94%;
+    --primary-foreground: 220 14% 11%;
+
+    --accent-soft: 200 30% 70%;
+
+    --secondary: 220 10% 18%;
+    --secondary-foreground: 210 15% 94%;
+
+    --muted: 220 10% 16%;
+    --muted-foreground: 220 8% 58%;
+
+    --accent: 220 10% 20%;
+    --accent-foreground: 210 15% 94%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 210 15% 98%;
+
+    --border: 220 10% 20%;
+    --input: 220 10% 20%;
+    --ring: 210 15% 70%;
+
+    --radius: 1rem;
+
+    --shadow-soft: 0 30px 80px -30px hsl(220 50% 2% / 0.5);
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: hsl(var(--card) / 0.55);
+    border: 1px solid hsl(var(--border) / 0.7);
+  }
+  .glass-blur {
+    background: hsl(var(--background) / 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(hsl(var(--border) / 0.35) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--border) / 0.35) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+  }
+  .text-soft {
+    color: hsl(var(--muted-foreground));
+  }
+  .gpu {
+    will-change: transform;
+    transform: translateZ(0);
+  }
+  .lift-card {
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    will-change: transform;
+    transition: transform 420ms var(--ease-out), border-color 420ms var(--ease-out), background-color 420ms var(--ease-out);
+  }
+  .lift-card:hover {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes breathe {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+.animate-float { animation: float 8s var(--ease-out) infinite; }
+.animate-breathe { animation: breathe 4s ease-in-out infinite; }
+
+/* Living ambient washes — slow, organic drift */
+@keyframes ambient-drift-1 {
+  0%   { transform: translate3d(0, 0, 0) scale(1); filter: hue-rotate(0deg); }
+  50%  { transform: translate3d(2%, -1.5%, 0) scale(1.06); filter: hue-rotate(8deg); }
+  100% { transform: translate3d(-1.5%, 2%, 0) scale(1.02); filter: hue-rotate(-6deg); }
+}
+@keyframes ambient-drift-2 {
+  0%   { transform: translate3d(0, 0, 0) scale(1.04); filter: hue-rotate(0deg); }
+  50%  { transform: translate3d(-2.5%, 1.5%, 0) scale(1); filter: hue-rotate(-10deg); }
+  100% { transform: translate3d(1.5%, -1%, 0) scale(1.08); filter: hue-rotate(6deg); }
+}
+@keyframes ambient-drift-3 {
+  0%   { transform: translate3d(0, 0, 0) scale(0.95); }
+  50%  { transform: translate3d(1.5%, 2%, 0) scale(1.08); }
+  100% { transform: translate3d(-2%, -1.5%, 0) scale(1); }
+}
+
+/* Subtle button hover lift */
+.btn-lift {
+  transition: transform 0.5s var(--ease-out), background-color 0.4s var(--ease-out), color 0.4s var(--ease-out);
+}
+.btn-lift:hover { transform: scale(1.04); }
+
+/* Animated underline link */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 1px;
+  width: 100%;
+  background: hsl(var(--foreground));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s var(--ease-out);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
