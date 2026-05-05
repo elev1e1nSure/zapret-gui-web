@@ -15,6 +15,9 @@ import { footerCopy, heroCopy } from "@/content/site-copy";
 import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
 
+const heroCtaIconClassName =
+  "size-4 shrink-0 transition-transform duration-[750ms] ease-[cubic-bezier(0.25,1,0.55,1)] group-hover:-translate-y-px";
+
 const Index = () => {
   const { label: releaseVersionLabel, status: releaseVersionStatus } = useLatestZapretGuiVersion();
   const heroRef = useRef<HTMLElement>(null);
@@ -78,25 +81,25 @@ const Index = () => {
               href={DOWNLOAD_EXE_URL}
               className="btn-lift group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background font-medium"
             >
-              <DownloadIcon className="size-4 transition-transform duration-500 group-hover:-translate-y-0.5" strokeWidth={2} />
+              <DownloadIcon className={heroCtaIconClassName} strokeWidth={2} />
               {heroCopy.downloadWindows}
             </a>
             <a
               href={REPO_GUI_APP}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-lift inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
+              className="btn-lift group inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
             >
-              <Github className="size-4" strokeWidth={2} />
+              <Github className={heroCtaIconClassName} strokeWidth={2} />
               {heroCopy.heroGithub}
             </a>
             <a
               href={TELEGRAM_NEWS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-lift inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
+              className="btn-lift group inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
             >
-              <Send className="size-4" strokeWidth={2} />
+              <Send className={heroCtaIconClassName} strokeWidth={2} />
               {heroCopy.heroTelegram}
             </a>
           </motion.div>
