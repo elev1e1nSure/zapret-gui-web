@@ -80,8 +80,7 @@ export const Navbar = () => {
     }
   }, [downloadInView]);
 
-  const showHeaderAside =
-    !downloadInView || scrollY >= NAV_SCROLL_SHOW_DOWNLOAD_PX || auxNavFocus;
+  const showHeaderAside = !downloadInView || auxNavFocus;
 
   const showScrollTop = scrollY > NAV_SCROLL_TOP_SHOW_PX;
 

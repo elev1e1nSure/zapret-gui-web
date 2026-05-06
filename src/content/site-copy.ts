@@ -3,6 +3,7 @@
  * Порядок карточек «Возможности» должен совпадать с порядком иконок в `Features.tsx`.
  */
 
+/** Порог для Navbar: при прокрутке вверх выше этой отметки снимаем режим якорного меню. */
 export const NAV_SCROLL_SHOW_DOWNLOAD_PX = 220;
 /** Прокрутка ниже этой отметки — показываем кнопку «наверх» (справа снизу). */
 export const NAV_SCROLL_TOP_SHOW_PX = 320;
@@ -17,8 +18,8 @@ export const navCopy = {
 
 export const heroCopy = {
   title: "ZAPRET",
-  subtitleBeforeBreak: "GUI-обёртка для обхода блокировок Discord и YouTube.",
-  subtitleAfterBreak: "Один клик вместо bat-файлов.",
+  subtitle:
+    "Доступ к YouTube и Discord без лишних настроек. Программа сама подберёт нужную стратегию и параметры под вашу сеть. Нажал один раз — и всё работает.",
   downloadWindows: "Скачать для Windows",
   heroGithub: "GitHub",
   heroTelegram: "Telegram",

@@ -80,9 +80,9 @@ const Index = () => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: motionEase, delay: 0.25 }}
-            className="text-soft text-base md:text-lg max-w-md mx-auto mt-6 text-center leading-relaxed"
+            className="text-soft text-base md:text-lg max-w-3xl mx-auto mt-6 text-center leading-relaxed"
           >
-            {heroCopy.subtitleBeforeBreak} {heroCopy.subtitleAfterBreak}
+            {heroCopy.subtitle}
           </motion.p>
 
           <motion.div
