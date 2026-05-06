@@ -4,12 +4,15 @@
  */
 
 export const NAV_SCROLL_SHOW_DOWNLOAD_PX = 220;
+/** Прокрутка ниже этой отметки — показываем кнопку «наверх» (справа снизу). */
+export const NAV_SCROLL_TOP_SHOW_PX = 320;
 
 export const navCopy = {
-  brand: "ZAPRET",
   linkFeatures: "Возможности",
   linkHowItWorks: "Как работает",
   headerDownload: "Скачать",
+  /** Плавающая кнопка прокрутки вверх. */
+  scrollToTop: "Наверх",
 } as const;
 
 export const heroCopy = {

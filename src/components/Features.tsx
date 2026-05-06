@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { type PointerEvent as ReactPointerEvent, useCallback, useRef, useState } from "react";
 import { Zap, Shuffle, Cpu, Eye, ShieldCheck, Sparkles } from "lucide-react";
+import { GlassSpotlightPanel, GLASS_GRID_SPOT_OFF } from "@/components/GlassSpotlightPanel";
 import { featuresSectionCopy } from "@/content/site-copy";
 import { motionEase } from "@/lib/motion";
 
@@ -20,6 +21,37 @@ export const Features = () => {
   });
   const labelX = useTransform(scrollYProgress, [0, 1], [-30, 30]);
 
+  /** DOM-ячейки сетки — хит-тест по bounding box, зазоры между карточками = мимо всех. */
+  const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [gridHit, setGridHit] = useState<{ idx: number; x: number; y: number } | null>(null);
+
+  const bindCellRef = useCallback((index: number) => (node: HTMLDivElement | null) => {
+    cellRefs.current[index] = node;
+  }, []);
+
+  const handleGridPointerMove = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
+    let hit: { idx: number; x: number; y: number } | null = null;
+    for (let i = 0; i < items.length; i++) {
+      const node = cellRefs.current[i];
+      if (!node) continue;
+      const r = node.getBoundingClientRect();
+      if (
+        e.clientX >= r.left &&
+        e.clientX < r.right &&
+        e.clientY >= r.top &&
+        e.clientY < r.bottom
+      ) {
+        hit = { idx: i, x: e.clientX - r.left, y: e.clientY - r.top };
+        break;
+      }
+    }
+    setGridHit(hit);
+  }, []);
+
+  const handleGridPointerLeave = useCallback(() => {
+    setGridHit(null);
+  }, []);
+
   return (
     <section ref={ref} id="features" className="container mx-auto px-6 py-32 relative">
       <motion.div
@@ -35,34 +67,36 @@ export const Features = () => {
         <h2 className="text-4xl md:text-5xl font-black tracking-[-0.03em] leading-[1.05]">
           {featuresSectionCopy.title}
         </h2>
-        <p className="text-soft mt-5 text-lg leading-relaxed">
-          {featuresSectionCopy.lead}
-        </p>
+        <p className="text-soft mt-5 text-lg leading-relaxed">{featuresSectionCopy.lead}</p>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div
+        className="grid md:grid-cols-2 lg:grid-cols-3 gap-3"
+        onPointerMove={handleGridPointerMove}
+        onPointerLeave={handleGridPointerLeave}
+      >
         {items.map((it, i) => (
           <motion.div
+            ref={bindCellRef(i)}
             key={it.title}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.8, ease: motionEase, delay: i * 0.07 }}
-            className="group glass lift-card rounded-2xl p-7 hover:border-foreground/30 cursor-default relative overflow-hidden"
+            className="h-full min-h-0"
           >
-            {/* subtle hover spotlight */}
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(400px circle at 50% 0%, hsl(var(--foreground) / 0.04), transparent 60%)",
-              }}
-            />
-            <div className="size-10 rounded-xl bg-secondary flex items-center justify-center mb-5 transition-colors duration-500 group-hover:bg-foreground">
-              <it.icon className="size-4 text-foreground/80 transition-colors duration-500 group-hover:text-background" strokeWidth={1.75} />
-            </div>
-            <h3 className="font-semibold text-base mb-1.5">{it.title}</h3>
-            <p className="text-sm text-soft leading-relaxed">{it.desc}</p>
+            <GlassSpotlightPanel
+              gridSpot={
+                gridHit?.idx === i ? { mode: "on", spot: { x: gridHit.x, y: gridHit.y } } : GLASS_GRID_SPOT_OFF
+              }
+              className="h-full cursor-default p-7"
+            >
+              <div className="mb-5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-border/35 bg-secondary/45">
+                <it.icon className="size-4 text-foreground/75" strokeWidth={1.75} />
+              </div>
+              <h3 className="font-semibold text-base mb-1.5">{it.title}</h3>
+              <p className="text-sm text-soft leading-relaxed">{it.desc}</p>
+            </GlassSpotlightPanel>
           </motion.div>
         ))}
       </div>

@@ -79,10 +79,14 @@ const Index = () => {
             <a
               id="download"
               href={DOWNLOAD_EXE_URL}
-              className="btn-lift group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background font-medium"
+              className="btn-download-fill btn-lift group relative isolate overflow-hidden inline-flex items-center justify-center px-6 py-3 rounded-full bg-foreground text-background font-medium"
             >
-              <DownloadIcon className={heroDownloadIconClassName} strokeWidth={2} />
-              {heroCopy.downloadWindows}
+              <span className="btn-download-fill__blob" aria-hidden />
+              <span className="btn-download-fill__shine" aria-hidden />
+              <span className="relative z-10 inline-flex items-center gap-2">
+                <DownloadIcon className={heroDownloadIconClassName} strokeWidth={2} />
+                {heroCopy.downloadWindows}
+              </span>
             </a>
             <a
               href={REPO_GUI_APP}
