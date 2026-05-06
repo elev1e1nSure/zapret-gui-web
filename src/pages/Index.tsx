@@ -4,16 +4,31 @@ import { ChevronDown, Github, Send, Download as DownloadIcon } from "lucide-reac
 import { Navbar } from "@/components/Navbar";
 import { useLatestZapretGuiVersion } from "@/hooks/use-latest-zapret-gui-version";
 import { motionEase } from "@/lib/motion";
-import {
-  AUTHOR_GITHUB_URL,
-  DOWNLOAD_EXE_URL,
-  REPO_GUI_APP,
-  REPO_ZAPRET_DISCORD_YT,
-  TELEGRAM_NEWS_URL,
-} from "@/lib/site";
+import { DOWNLOAD_EXE_URL, AUTHOR_GITHUB_URL, REPO_GUI_APP, REPO_ZAPRET_DISCORD_YT, TELEGRAM_NEWS_URL } from "@/lib/site";
 import { footerCopy, heroCopy } from "@/content/site-copy";
 import { Features } from "@/components/Features";
 import { HowItWorks } from "@/components/HowItWorks";
+
+const FOOTER_LINKS = [
+  {
+    href: REPO_GUI_APP,
+    label: footerCopy.linkGuiRepo,
+    icon: Github,
+    title: "zapret-gui — исходный код приложения",
+  },
+  {
+    href: REPO_ZAPRET_DISCORD_YT,
+    label: footerCopy.linkCoreRepo,
+    icon: Github,
+    title: "zapret-discord-youtube — ядро для Discord и YouTube",
+  },
+  {
+    href: TELEGRAM_NEWS_URL,
+    label: footerCopy.linkTelegramChannel,
+    icon: Send,
+    title: "Официальный канал с новостями и релизами",
+  },
+] as const;
 
 const heroDownloadIconClassName =
   "size-4 shrink-0 transition-transform duration-[750ms] ease-[cubic-bezier(0.25,1,0.55,1)] group-hover:-translate-y-px";
@@ -56,7 +71,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, ease: motionEase, delay: 0.1 }}
-            className="text-7xl md:text-[10rem] font-black tracking-[-0.04em] leading-none text-center"
+            className="text-7xl md:text-[10rem] font-black tracking-[-0.04em] leading-none text-center text-foreground"
           >
             {heroCopy.title}
           </motion.h1>
@@ -92,7 +107,7 @@ const Index = () => {
               href={REPO_GUI_APP}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-lift inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
+              className="btn-lift hero-glass-cta inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
             >
               <Github className="size-4" strokeWidth={2} />
               {heroCopy.heroGithub}
@@ -101,7 +116,7 @@ const Index = () => {
               href={TELEGRAM_NEWS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-lift inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
+              className="btn-lift hero-glass-cta inline-flex items-center gap-2 px-6 py-3 rounded-full glass hover:bg-secondary/60"
             >
               <Send className="size-4" strokeWidth={2} />
               {heroCopy.heroTelegram}
@@ -115,7 +130,12 @@ const Index = () => {
           transition={{ delay: 1.4, duration: 1 }}
           className="absolute bottom-10 text-soft"
         >
-          <ChevronDown className="size-5 animate-float" />
+          <div
+            className="inline-flex cursor-default motion-safe:transition-[transform] motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:hover:scale-[1.06] motion-safe:hover:translate-y-0.5"
+            aria-hidden
+          >
+            <ChevronDown className="size-5 animate-float motion-reduce:animate-none" />
+          </div>
         </motion.div>
       </section>
 
@@ -123,7 +143,7 @@ const Index = () => {
       <HowItWorks />
 
       <footer className="relative mt-4 bg-muted/25 pt-7 pb-4 text-center text-sm text-muted-foreground border-t border-border/15">
-        <div className="container mx-auto max-w-lg px-6 space-y-1.5">
+        <div className="container mx-auto max-w-lg px-6 space-y-2">
           <p className="leading-snug text-soft">
             <span className="font-medium text-foreground/85">{footerCopy.copyright}</span>
             <span className="mx-1.5 text-[1.05rem] font-medium leading-none text-muted-foreground/80 tabular-nums" aria-hidden>
@@ -131,47 +151,44 @@ const Index = () => {
             </span>
             <span>
               {footerCopy.createdByPrefix}{" "}
-              <a href={AUTHOR_GITHUB_URL} target="_blank" rel="noopener noreferrer" className="footer-link">
+              <a
+                href={AUTHOR_GITHUB_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-link"
+                title="GitHub профиля автора"
+              >
                 {footerCopy.authorName}
               </a>
             </span>
           </p>
-          <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 leading-snug text-soft">
-            <a
-              href={REPO_GUI_APP}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="footer-link inline-flex items-center gap-1.5"
-            >
-              <Github className="size-3.5 opacity-80 shrink-0" strokeWidth={2} aria-hidden />
-              {footerCopy.linkZapretGui}
-            </a>
-            <span className="text-[1.05rem] font-medium leading-none text-muted-foreground/80 tabular-nums" aria-hidden>
-              ·
-            </span>
-            <a
-              href={TELEGRAM_NEWS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="footer-link inline-flex items-center gap-1.5"
-            >
-              <Send className="size-3.5 opacity-80 shrink-0" strokeWidth={2} aria-hidden />
-              {footerCopy.linkTelegramChannel}
-            </a>
-            <span className="text-[1.05rem] font-medium leading-none text-muted-foreground/80 tabular-nums" aria-hidden>
-              ·
-            </span>
-            <a
-              href={REPO_ZAPRET_DISCORD_YT}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="footer-link inline-flex items-center gap-1.5 text-sm"
-            >
-              <Github className="size-3.5 opacity-80 shrink-0" strokeWidth={2} aria-hidden />
-              {footerCopy.linkCoreRepoLabel}
-            </a>
-          </p>
-          <p className="pt-1 text-[0.62rem] sm:text-[0.65rem] text-muted-foreground/35 max-w-md mx-auto leading-normal select-none">
+          <nav aria-label={footerCopy.linksNavLabel}>
+            <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-x-2 gap-y-1 p-0 leading-snug text-soft">
+              {FOOTER_LINKS.map(({ href, label, icon: Icon, title }, index) => (
+                <li key={href} className="flex items-center gap-x-2">
+                  {index > 0 ? (
+                    <span
+                      className="select-none text-[1.05rem] font-medium leading-none text-muted-foreground/80 tabular-nums"
+                      aria-hidden
+                    >
+                      ·
+                    </span>
+                  ) : null}
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link inline-flex items-center gap-1.5"
+                    title={title}
+                  >
+                    <Icon className="size-3.5 shrink-0 opacity-80" strokeWidth={2} aria-hidden />
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <p className="pt-0.5 text-[0.62rem] sm:text-[0.65rem] text-muted-foreground/35 max-w-md mx-auto leading-normal select-none">
             {footerCopy.disclaimer}
           </p>
         </div>

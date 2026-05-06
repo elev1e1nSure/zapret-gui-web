@@ -1,7 +1,8 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { type PointerEvent as ReactPointerEvent, useCallback, useRef, useState } from "react";
+import { useRef } from "react";
 import { GlassSpotlightPanel, GLASS_GRID_SPOT_OFF } from "@/components/GlassSpotlightPanel";
 import { howSectionCopy } from "@/content/site-copy";
+import { usePointerGridHit } from "@/hooks/use-pointer-grid-hit";
 import { motionEase } from "@/lib/motion";
 
 const steps = howSectionCopy.steps.map((s) => ({
@@ -18,35 +19,8 @@ export const HowItWorks = () => {
   });
   const lineScale = useTransform(scrollYProgress, [0.1, 0.6], [0, 1]);
 
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [rowHit, setRowHit] = useState<{ idx: number; x: number; y: number } | null>(null);
-
-  const bindStepRef = useCallback((index: number) => (node: HTMLDivElement | null) => {
-    stepRefs.current[index] = node;
-  }, []);
-
-  const handleRowPointerMove = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
-    let hit: { idx: number; x: number; y: number } | null = null;
-    for (let i = 0; i < steps.length; i++) {
-      const node = stepRefs.current[i];
-      if (!node) continue;
-      const r = node.getBoundingClientRect();
-      if (
-        e.clientX >= r.left &&
-        e.clientX < r.right &&
-        e.clientY >= r.top &&
-        e.clientY < r.bottom
-      ) {
-        hit = { idx: i, x: e.clientX - r.left, y: e.clientY - r.top };
-        break;
-      }
-    }
-    setRowHit(hit);
-  }, []);
-
-  const handleRowPointerLeave = useCallback(() => {
-    setRowHit(null);
-  }, []);
+  const { hit: rowHit, bindCellRef: bindStepRef, onPointerMove: handleRowPointerMove, onPointerLeave: handleRowPointerLeave } =
+    usePointerGridHit(steps.length);
 
   return (
     <section ref={ref} id="how" className="container mx-auto px-6 py-32 relative">
@@ -84,11 +58,13 @@ export const HowItWorks = () => {
                 className="group/step p-8"
               >
                 <div className="mb-6 leading-none tabular-nums">
-                  <span className="block text-7xl font-black tracking-[-0.05em] text-foreground/[0.125] md:text-8xl motion-safe:transition-[color] motion-safe:duration-500 motion-safe:ease-out group-hover/step:text-foreground/[0.24]">
+                  <span className="block origin-left text-7xl font-black tracking-[-0.05em] text-foreground/[0.125] md:text-8xl motion-safe:transition-[color,transform] motion-safe:duration-550 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover/step:translate-x-0.5 group-hover/step:text-foreground/[0.24] motion-safe:group-hover/step:scale-[1.02]">
                     {s.n}
                   </span>
                 </div>
-                <h3 className="mb-2 text-2xl font-bold tracking-tight">{s.t}</h3>
+                <h3 className="mb-2 text-2xl font-bold tracking-tight motion-safe:transition-colors motion-safe:duration-500 motion-safe:ease-out group-hover/step:text-foreground/95">
+                  {s.t}
+                </h3>
                 <p className="text-soft leading-relaxed">{s.d}</p>
               </GlassSpotlightPanel>
             </motion.div>

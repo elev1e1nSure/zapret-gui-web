@@ -88,8 +88,8 @@ export const Navbar = () => {
   return (
     <>
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-          scrolled ? "glass-blur border-b border-border/60" : "bg-transparent border-b border-transparent"
+        className={`fixed top-0 inset-x-0 z-50 transition-[background-color,backdrop-filter,border-color,box-shadow] duration-[560ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          scrolled ? "glass-blur border-b border-border/60 shadow-[0_18px_44px_-38px_hsl(220_45%_3%_/_0.35)]" : "bg-transparent border-b border-transparent shadow-none"
         }`}
       >
         <div className="container mx-auto flex justify-end px-6 py-5 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center">
@@ -139,7 +139,7 @@ export const Navbar = () => {
           scale: showScrollTop ? 1 : 0.94,
         }}
         transition={{ duration: 0.45, ease: motionEase }}
-        className="fixed z-40 flex size-11 items-center justify-center rounded-full glass border border-border/55 text-foreground shadow-[var(--shadow-soft)] btn-lift hover:bg-secondary/40 max-md:bottom-[max(1.25rem,env(safe-area-inset-bottom))] max-md:right-[max(1.25rem,env(safe-area-inset-right))] md:bottom-8 md:right-8"
+        className="fixed z-40 flex size-11 items-center justify-center rounded-full glass border border-border/55 text-foreground shadow-[var(--shadow-soft)] btn-lift motion-safe:transition-[transform,background-color,box-shadow,border-color] motion-safe:duration-500 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-border/65 hover:bg-secondary/45 hover:shadow-[0_22px_52px_-34px_hsl(220_38%_5%_/_0.42)] max-md:bottom-[max(1.25rem,env(safe-area-inset-bottom))] max-md:right-[max(1.25rem,env(safe-area-inset-right))] md:bottom-8 md:right-8"
         style={{ pointerEvents: showScrollTop ? "auto" : "none" }}
         aria-label={navCopy.scrollToTop}
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

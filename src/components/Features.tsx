@@ -1,8 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { type PointerEvent as ReactPointerEvent, useCallback, useRef, useState } from "react";
+import { useRef } from "react";
 import { Zap, Shuffle, Cpu, Eye, ShieldCheck, Sparkles } from "lucide-react";
 import { GlassSpotlightPanel, GLASS_GRID_SPOT_OFF } from "@/components/GlassSpotlightPanel";
 import { featuresSectionCopy } from "@/content/site-copy";
+import { usePointerGridHit } from "@/hooks/use-pointer-grid-hit";
 import { motionEase } from "@/lib/motion";
 
 /** Порядок иконок должен совпадать с порядком `featuresSectionCopy.cards`. */
@@ -21,36 +22,8 @@ export const Features = () => {
   });
   const labelX = useTransform(scrollYProgress, [0, 1], [-30, 30]);
 
-  /** DOM-ячейки сетки — хит-тест по bounding box, зазоры между карточками = мимо всех. */
-  const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [gridHit, setGridHit] = useState<{ idx: number; x: number; y: number } | null>(null);
-
-  const bindCellRef = useCallback((index: number) => (node: HTMLDivElement | null) => {
-    cellRefs.current[index] = node;
-  }, []);
-
-  const handleGridPointerMove = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
-    let hit: { idx: number; x: number; y: number } | null = null;
-    for (let i = 0; i < items.length; i++) {
-      const node = cellRefs.current[i];
-      if (!node) continue;
-      const r = node.getBoundingClientRect();
-      if (
-        e.clientX >= r.left &&
-        e.clientX < r.right &&
-        e.clientY >= r.top &&
-        e.clientY < r.bottom
-      ) {
-        hit = { idx: i, x: e.clientX - r.left, y: e.clientY - r.top };
-        break;
-      }
-    }
-    setGridHit(hit);
-  }, []);
-
-  const handleGridPointerLeave = useCallback(() => {
-    setGridHit(null);
-  }, []);
+  const { hit: gridHit, bindCellRef, onPointerMove: handleGridPointerMove, onPointerLeave: handleGridPointerLeave } =
+    usePointerGridHit(items.length);
 
   return (
     <section ref={ref} id="features" className="container mx-auto px-6 py-32 relative">
@@ -91,8 +64,8 @@ export const Features = () => {
               }
               className="h-full cursor-default p-7"
             >
-              <div className="mb-5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-border/35 bg-secondary/45">
-                <it.icon className="size-4 text-foreground/75" strokeWidth={1.75} />
+              <div className="mb-5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-border/35 bg-secondary/45 motion-safe:transition-[border-color,background-color,transform,box-shadow] motion-safe:duration-600 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:shadow-[inset_0_1px_0_0_hsl(var(--foreground)_/_0.04)] group-hover/spot:border-border/48 group-hover/spot:bg-secondary/58 group-hover/spot:shadow-[inset_0_1px_0_0_hsl(var(--foreground)_/_0.07)] motion-safe:group-hover/spot:scale-[1.04]">
+                <it.icon className="size-4 text-foreground/75 motion-safe:transition-transform motion-safe:duration-600 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover/spot:scale-105 motion-safe:group-hover/spot:-rotate-3" strokeWidth={1.75} />
               </div>
               <h3 className="font-semibold text-base mb-1.5">{it.title}</h3>
               <p className="text-sm text-soft leading-relaxed">{it.desc}</p>

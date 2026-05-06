@@ -83,7 +83,12 @@
     transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     will-change: transform;
-    transition: transform 420ms var(--ease-out), border-color 420ms var(--ease-out), background-color 420ms var(--ease-out);
+    transition:
+      transform 520ms var(--ease-out),
+      border-color 520ms var(--ease-out),
+      background-color 520ms var(--ease-out),
+      box-shadow 620ms var(--ease-out);
+    box-shadow: 0 0 0 transparent;
   }
   /* Glass spotlight panel (Features / How it works): мягкий fade без рывка между карточками */
   .glass-spotlight-glow.glass-spotlight-glow--off {
@@ -98,6 +103,7 @@
 
   .lift-card:hover {
     transform: translate3d(0, -4px, 0);
+    box-shadow: 0 24px 44px -36px hsl(220 45% 4% / 0.42);
   }
   @media (prefers-reduced-motion: reduce) {
     .glass-spotlight-panel {
@@ -113,10 +119,51 @@
     }
     .lift-card:hover {
       transform: translate3d(0, 0, 0);
+      box-shadow: none;
+    }
+  }
+
+  /** Вторичные кнопки (glass): чуть глубже при наведении, без смены характера */
+  .hero-glass-cta {
+    border: 1px solid hsl(var(--border) / 0.38);
+    transition:
+      transform 0.6s cubic-bezier(0.25, 1, 0.55, 1),
+      border-color 0.55s var(--ease-out),
+      background-color 0.45s var(--ease-out),
+      box-shadow 0.65s var(--ease-out);
+    box-shadow: 0 14px 42px -34px hsl(220 40% 3% / 0.22);
+  }
+  .hero-glass-cta:hover {
+    border-color: hsl(var(--border) / 0.62);
+    box-shadow: 0 22px 50px -28px hsl(220 38% 4% / 0.38);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-glass-cta {
+      transition-duration: 0.01ms;
+      box-shadow: none;
+    }
+    .hero-glass-cta:hover {
+      box-shadow: none;
     }
   }
   .footer-link {
-    @apply underline-offset-[3px] hover:underline hover:text-foreground transition-colors duration-300;
+    @apply underline-offset-[3px] hover:underline hover:text-foreground;
+    transition-property: color, text-decoration-color, transform, opacity;
+    transition-duration: 320ms, 320ms, 420ms, 420ms;
+    transition-timing-function: var(--ease-out), var(--ease-out), cubic-bezier(0.22, 1, 0.36, 1), var(--ease-out);
+  }
+  .footer-link:hover {
+    transform: translateY(-1px);
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .footer-link {
+      transition-property: color, text-decoration-color;
+      transition-duration: 0.01ms;
+    }
+    .footer-link:hover {
+      transform: none;
+    }
   }
 }
 
@@ -220,7 +267,7 @@
   }
 }
 
-/* Навссылки: без выразительного блика; спокойное «стекло» + едва заметный трекинг */
+/* Навссылки: светлое «стекло» при hover + едва заметный трекинг */
 .nav-link {
   position: relative;
   isolation: isolate;
@@ -248,10 +295,12 @@
   opacity: 0;
   pointer-events: none;
   transform: scale(0.98);
-  background-color: hsl(var(--card) / 0.04);
-  box-shadow: 0 3px 16px hsl(220 58% 3% / 0.028);
-  backdrop-filter: blur(8px) saturate(1.06);
-  -webkit-backdrop-filter: blur(8px) saturate(1.06);
+  background-color: hsl(var(--foreground) / 0.035);
+  box-shadow:
+    0 4px 28px hsl(var(--foreground) / 0.02),
+    inset 0 1px 0 hsl(var(--foreground) / 0.06);
+  backdrop-filter: blur(10px) saturate(1.06);
+  -webkit-backdrop-filter: blur(10px) saturate(1.06);
   transition:
     opacity 450ms var(--ease-out),
     transform 520ms cubic-bezier(0.24, 1, 0.4, 1),
@@ -261,7 +310,7 @@
 }
 
 .nav-link:hover {
-  color: hsl(var(--foreground) / 0.9);
+  color: hsl(var(--foreground) / 0.95);
   letter-spacing: 0.06em;
   transform: translate3d(0, -0.5px, 0);
 }
@@ -269,10 +318,12 @@
 .nav-link:hover::before {
   opacity: 1;
   transform: scale(1);
-  background-color: hsl(var(--card) / 0.055);
-  box-shadow: 0 8px 24px hsl(220 60% 4% / 0.034);
-  backdrop-filter: blur(16px) saturate(1.08);
-  -webkit-backdrop-filter: blur(16px) saturate(1.08);
+  background-color: hsl(var(--foreground) / 0.065);
+  box-shadow:
+    0 8px 32px hsl(var(--foreground) / 0.035),
+    inset 0 1px 0 hsl(var(--foreground) / 0.1);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
 }
 
 .nav-link:focus-visible {

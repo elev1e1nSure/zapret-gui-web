@@ -20,8 +20,8 @@ type GlassSpotlightPanelProps = {
   gridSpot?: GlassGridSpot;
 };
 
-/** Плавность следования */
-const LERP = 0.085;
+/** Плавность следования (чуть ниже — мягче инерция без «дёрганья») */
+const LERP = 0.072;
 const SNAP_PX = 0.65;
 const REST_EPS = 0.35;
 const GLOW_LEAVE_MS = 220;
@@ -212,6 +212,7 @@ export function GlassSpotlightPanel({ className, children, gridSpot }: GlassSpot
         "border bg-[hsl(var(--card)_/_0.38)] backdrop-blur-[22px]",
         glowOn ? "border-border/[0.52] shadow-[0_22px_48px_-44px_hsl(220_32%_4%_/_0.52)]" : "border-border/45",
         "shadow-[inset_0_1px_0_0_hsl(var(--foreground)_/_0.05)]",
+        /* Без hover-translate: долгая анимация сдвига на 1px ощущалась как «подпрыгивание». Только бордер/тень — спокойнее. */
         "motion-safe:transition-[border-color,box-shadow] motion-safe:duration-700 motion-safe:ease-out",
         !delegated &&
           !glowOn &&

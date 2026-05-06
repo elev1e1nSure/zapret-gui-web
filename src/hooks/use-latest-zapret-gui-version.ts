@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
+import { z } from "zod";
 
 import {
   ZAPRET_GUI_RELEASES_LATEST_FETCH_URL,
   ZAPRET_GUI_VERSION_FALLBACK_RAW,
 } from "@/lib/site";
+
+/** Минимальная схема ответа GET /releases/latest — только нужное поле, без «доверия» к произвольному JSON. */
+const githubLatestReleaseSchema = z.object({
+  tag_name: z.string().refine((s) => s.trim().length > 0, { message: "empty tag" }),
+});
 
 /** Приводит tag_name релиза к виду vMAJOR.MINOR.PATCH (три числовых сегмента). */
 export function releaseTagToSemverV(tagName: string): string {
@@ -44,12 +50,14 @@ export function useLatestZapretGuiVersion(): { label: string; status: Status } {
             : {};
         const res = await fetch(ZAPRET_GUI_RELEASES_LATEST_FETCH_URL, {
           signal: ac.signal,
+          credentials: "omit",
           headers,
         });
         if (!res.ok) throw new Error(String(res.status));
-        const data = (await res.json()) as { tag_name?: string; message?: string };
-        const tag = data.tag_name;
-        if (typeof tag !== "string" || !tag.trim()) throw new Error("no tag");
+        const json: unknown = await res.json();
+        const parsed = githubLatestReleaseSchema.safeParse(json);
+        if (!parsed.success) throw new Error("release shape");
+        const tag = parsed.data.tag_name;
         if (!ac.signal.aborted) {
           setLabel(releaseTagToSemverV(tag));
           setStatus("ready");

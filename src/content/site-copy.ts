@@ -86,12 +86,16 @@ export const howSectionCopy = {
 
 export const footerCopy = {
   copyright: "© 2026 ZAPRET GUI",
-  createdByPrefix: "Created by",
+  /** Подпись перед ссылкой на автора */
+  createdByPrefix: "Автор:",
   authorName: "elev1e1nSure",
-  linkZapretGui: "zapret-gui",
-  linkTelegramChannel: "Telegram Channel",
-  linkCoreRepoLabel: "zapret-discord-youtube",
-  disclaimer: "Not affiliated with Google or Discord.",
+  linksNavLabel: "Репозитории проекта и канал",
+  /** zapret-gui — клиентское приложение */
+  linkGuiRepo: "Приложение",
+  /** zapret-discord-youtube — ядро обхода */
+  linkCoreRepo: "Ядро обхода",
+  linkTelegramChannel: "Канал в Telegram",
+  disclaimer: "Не аффилированы с Google или Discord.",
 } as const;
 
 export const notFoundCopy = {
