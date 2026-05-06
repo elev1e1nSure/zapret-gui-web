@@ -64,6 +64,15 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      // Named tokens replace arbitrary duration/ease utilities (avoids Tailwind ambiguous warnings / missing CSS).
+      transitionDuration: {
+        nav: "560ms",
+        heroChevron: "750ms",
+      },
+      transitionTimingFunction: {
+        "out-soft": "cubic-bezier(0.22, 1, 0.36, 1)",
+        "out-alt": "cubic-bezier(0.25, 1, 0.55, 1)",
+      },
       keyframes: {
         "accordion-down": {
           from: {

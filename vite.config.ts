@@ -10,7 +10,7 @@ export default defineConfig({
     hmr: {
       overlay: false,
     },
-    /** Прокси GitHub API: браузер → localhost, Node добавляет User-Agent (иначе API часто отвечает 403). */
+    // GitHub API proxy: browser hits same origin; Node sets User-Agent (avoids 403 from API without it).
     proxy: {
       "/__gh-api": {
         target: "https://api.github.com",

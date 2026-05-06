@@ -1,18 +1,17 @@
 /**
- * Тексты лендинга — правьте по желанию.
- * Порядок карточек «Возможности» должен совпадать с порядком иконок в `Features.tsx`.
+ * Landing UI copy (Russian). Keep `FEATURE_ICONS` in `Features.tsx` in sync with `featuresSectionCopy.cards`.
  */
 
-/** Порог для Navbar: при прокрутке вверх выше этой отметки снимаем режим якорного меню. */
+/** Navbar: show header glass tint after scrolling past this Y. */
+export const NAV_GLASS_SCROLL_THRESHOLD_PX = 400;
+/** Navbar: scrolling up above this offset clears auxiliary nav mode when hero download is in view. */
 export const NAV_SCROLL_SHOW_DOWNLOAD_PX = 220;
-/** Прокрутка ниже этой отметки — показываем кнопку «наверх» (справа снизу). */
+/** Show floating “scroll to top” control past this scroll Y. */
 export const NAV_SCROLL_TOP_SHOW_PX = 320;
 
 export const navCopy = {
   linkFeatures: "Возможности",
   linkHowItWorks: "Как работает",
-  headerDownload: "Скачать",
-  /** Плавающая кнопка прокрутки вверх. */
   scrollToTop: "Наверх",
 } as const;
 
@@ -23,18 +22,18 @@ export const heroCopy = {
   downloadWindows: "Скачать для Windows",
   heroGithub: "GitHub",
   heroTelegram: "Telegram",
-  /** title на блоке версии при ошибке загрузки с GitHub */
   versionFetchErrorTitle: "Не удалось получить версию с GitHub",
 } as const;
+
+/** Shared download icon sizing/motion — hero and navbar CTAs use the same markup. */
+export const primaryDownloadIconClassName =
+  "size-4 shrink-0 transition-transform duration-heroChevron ease-out-alt group-hover:-translate-y-px";
 
 export const featuresSectionCopy = {
   kicker: "— Возможности",
   title: "Обход без сложностей.",
   lead: "Всё, что раньше требовало перебора десятков стратегий и сложной настройки — теперь в одном приложении.",
-  /**
-   * Карточки по порядку: Zap → Shuffle → Cpu → Eye → ShieldCheck → Sparkles
-   * (см. массив иконок в components/Features.tsx).
-   */
+  /** Order aligns with `FEATURE_ICONS`: Zap → Shuffle → Cpu → Eye → ShieldCheck → Sparkles. */
   cards: [
     {
       title: "Автоподбор",
@@ -87,13 +86,10 @@ export const howSectionCopy = {
 
 export const footerCopy = {
   copyright: "© 2026 ZAPRET GUI",
-  /** Подпись перед ссылкой на автора */
   createdByPrefix: "Автор:",
   authorName: "elev1e1nSure",
   linksNavLabel: "Репозитории проекта и канал",
-  /** zapret-gui — клиентское приложение */
   linkGuiRepo: "Приложение",
-  /** zapret-discord-youtube — ядро обхода */
   linkCoreRepo: "Ядро обхода",
   linkTelegramChannel: "Канал в Telegram",
   disclaimer: "Не аффилированы с Google или Discord.",

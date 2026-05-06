@@ -58,7 +58,7 @@ export const HowItWorks = () => {
                 className="group/step p-8"
               >
                 <div className="mb-6 leading-none tabular-nums">
-                  <span className="block origin-left text-7xl font-black tracking-[-0.05em] text-foreground/[0.125] md:text-8xl motion-safe:transition-[color,transform] motion-safe:duration-550 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover/step:translate-x-0.5 group-hover/step:text-foreground/[0.24] motion-safe:group-hover/step:scale-[1.02]">
+                  <span className="block origin-left text-7xl font-black tracking-[-0.05em] text-foreground/[0.125] md:text-8xl motion-safe:transition-[color,transform] motion-safe:duration-550 motion-safe:ease-out-soft motion-safe:group-hover/step:translate-x-0.5 group-hover/step:text-foreground/[0.24] motion-safe:group-hover/step:scale-[1.02]">
                     {s.n}
                   </span>
                 </div>

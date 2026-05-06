@@ -1,5 +1,33 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
+const COSMOS_STAR_COUNT = 96;
+
+function hash01(index: number, salt: number): number {
+  const t = Math.sin(index * 12.9898 + salt * 78.233) * 43758.5453123;
+  return t - Math.floor(t);
+}
+
+const COSMOS_STARS = Array.from({ length: COSMOS_STAR_COUNT }, (_, i) => {
+  const u1 = hash01(i, 1);
+  const u2 = hash01(i, 2);
+  const u3 = hash01(i, 3);
+  const left = u1 * 100;
+  const top = hash01(i, 4) * 100;
+  const size = 1 + u3 * 2.1;
+  const opacity = 0.07 + u2 * 0.2;
+  // Per-dot drift pacing (seconds): slow enough that motion stays subtle during a typical visit.
+  const duration = 18 + u1 * u3 * 54;
+  const delay = -u3 * duration;
+  const variant = i % 3;
+  return { left, top, size, opacity, duration, delay, variant };
+});
+
+const COSMOS_STAR_CLASS: Record<number, string> = {
+  0: "cosmos-star-dot cosmos-star-dot--a",
+  1: "cosmos-star-dot cosmos-star-dot--b",
+  2: "cosmos-star-dot cosmos-star-dot--c",
+};
+
 export const AmbientBackground = () => {
   const { scrollYProgress } = useScroll();
 
@@ -40,6 +68,24 @@ export const AmbientBackground = () => {
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none">
       <div className="absolute inset-0 bg-background" />
+
+      <div className="absolute inset-0" aria-hidden>
+        {COSMOS_STARS.map((s, i) => (
+          <span
+            key={i}
+            className={COSMOS_STAR_CLASS[s.variant]}
+            style={{
+              left: `${s.left}%`,
+              top: `${s.top}%`,
+              width: `${s.size}px`,
+              height: `${s.size}px`,
+              opacity: s.opacity,
+              animationDuration: `${s.duration}s`,
+              animationDelay: `${s.delay}s`,
+            }}
+          />
+        ))}
+      </div>
 
       <motion.div
         style={{ y: y1, x: x1 }}

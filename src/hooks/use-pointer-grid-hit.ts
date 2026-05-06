@@ -1,11 +1,9 @@
 import { type PointerEvent as ReactPointerEvent, useCallback, useRef, useState } from "react";
 
-/** Попадание указателя в одну из ячеек сетки (bounding box), координаты относительно ячейки. */
+/** Active cell in a pointer grid: index + pointer position relative to that cell. */
 export type PointerGridHit = { idx: number; x: number; y: number } | null;
 
-/**
- * Общая логика для Features / HowItWorks: хит-тест по DOM-ячейкам, зазоры между карточками = мимо всех.
- */
+/** DOM hit-testing for card grids (`Features`, `HowItWorks`); gutters fall through (no hit). */
 export function usePointerGridHit(cellCount: number) {
   const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [hit, setHit] = useState<PointerGridHit>(null);

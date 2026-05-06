@@ -6,12 +6,19 @@ import {
   ZAPRET_GUI_VERSION_FALLBACK_RAW,
 } from "@/lib/site";
 
-/** Минимальная схема ответа GET /releases/latest — только нужное поле, без «доверия» к произвольному JSON. */
+/** Minimal `/releases/latest` payload — rejects unexpected JSON shapes. */
 const githubLatestReleaseSchema = z.object({
   tag_name: z.string().refine((s) => s.trim().length > 0, { message: "empty tag" }),
 });
 
-/** Приводит tag_name релиза к виду vMAJOR.MINOR.PATCH (три числовых сегмента). */
+/** Parses `vMAJOR.MINOR.PATCH` (as produced by `releaseTagToSemverV`) for UI transitions. */
+export function semverVToTriple(version: string): [number, number, number] | null {
+  const m = /^v(\d+)\.(\d+)\.(\d+)$/i.exec(version.trim());
+  if (!m) return null;
+  return [parseInt(m[1], 10), parseInt(m[2], 10), parseInt(m[3], 10)];
+}
+
+/** Normalizes `tag_name` to `vMAJOR.MINOR.PATCH` (numeric segments only beyond semver core). */
 export function releaseTagToSemverV(tagName: string): string {
   const cleaned = tagName.trim().replace(/^v/i, "");
   const core = (cleaned.split(/[-+]/)[0] ?? cleaned).trim();
@@ -34,7 +41,7 @@ const fallbackLabel =
     : null;
 
 export function useLatestZapretGuiVersion(): { label: string; status: Status } {
-  const [label, setLabel] = useState("v…");
+  const [label, setLabel] = useState("v0.0.0");
   const [status, setStatus] = useState<Status>("loading");
 
   useEffect(() => {

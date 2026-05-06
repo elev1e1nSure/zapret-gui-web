@@ -19,8 +19,8 @@ execSync(`pnpm exec vite build --base=${JSON.stringify(base)}`, {
 
 const indexHtml = join(dist, "index.html");
 if (!existsSync(indexHtml)) {
-  console.error("Ожидался dist/index.html после сборки.");
+  console.error("Expected dist/index.html after build.");
   process.exit(1);
 }
 copyFileSync(indexHtml, join(dist, "404.html"));
-console.log(`Сборка для GitHub Pages: base=${base}, добавлен 404.html для SPA.`);
+console.log(`GitHub Pages build: base=${base}, copied 404.html for SPA routing.`);

@@ -6,7 +6,6 @@ import { featuresSectionCopy } from "@/content/site-copy";
 import { usePointerGridHit } from "@/hooks/use-pointer-grid-hit";
 import { motionEase } from "@/lib/motion";
 
-/** Порядок иконок должен совпадать с порядком `featuresSectionCopy.cards`. */
 const FEATURE_ICONS = [Zap, Shuffle, Cpu, Eye, ShieldCheck, Sparkles] as const;
 
 const items = FEATURE_ICONS.map((icon, i) => {
@@ -64,8 +63,8 @@ export const Features = () => {
               }
               className="h-full cursor-default p-7"
             >
-              <div className="mb-5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-border/35 bg-secondary/45 motion-safe:transition-[border-color,background-color,transform,box-shadow] motion-safe:duration-600 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:shadow-[inset_0_1px_0_0_hsl(var(--foreground)_/_0.04)] group-hover/spot:border-border/48 group-hover/spot:bg-secondary/58 group-hover/spot:shadow-[inset_0_1px_0_0_hsl(var(--foreground)_/_0.07)] motion-safe:group-hover/spot:scale-[1.04]">
-                <it.icon className="size-4 text-foreground/75 motion-safe:transition-transform motion-safe:duration-600 motion-safe:ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover/spot:scale-105 motion-safe:group-hover/spot:-rotate-3" strokeWidth={1.75} />
+              <div className="mb-5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-border/35 bg-secondary/45 motion-safe:transition-[border-color,background-color,transform,box-shadow] motion-safe:duration-600 motion-safe:ease-out-soft motion-safe:shadow-[inset_0_1px_0_0_hsl(var(--foreground)_/_0.04)] group-hover/spot:border-border/48 group-hover/spot:bg-secondary/58 group-hover/spot:shadow-[inset_0_1px_0_0_hsl(var(--foreground)_/_0.07)] motion-safe:group-hover/spot:scale-[1.04]">
+                <it.icon className="size-4 text-foreground/75 motion-safe:transition-transform motion-safe:duration-600 motion-safe:ease-out-soft motion-safe:group-hover/spot:scale-105 motion-safe:group-hover/spot:-rotate-3" strokeWidth={1.75} />
               </div>
               <h3 className="font-semibold text-base mb-1.5">{it.title}</h3>
               <p className="text-sm text-soft leading-relaxed">{it.desc}</p>

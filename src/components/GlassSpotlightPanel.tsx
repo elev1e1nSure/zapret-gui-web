@@ -3,7 +3,7 @@ import { type PointerEvent, type ReactNode, useEffect, useLayoutEffect, useRef, 
 
 import { cn } from "@/lib/utils";
 
-/** Неактивная плашка в режиме сетки — стабильная ссылка, без лишних эффектов. */
+/** Delegated grid mode — stable placeholder for off-cells (avoids effect churn). */
 export const GLASS_GRID_SPOT_OFF = { mode: "off" } as const;
 
 export type GlassGridSpot =
@@ -14,13 +14,13 @@ type GlassSpotlightPanelProps = {
   className?: string;
   children: ReactNode;
   /**
-   * Подсветка от родителя (полная область grid/flex вкл. зазоры).
-   * В промежутке между карточками `mode:'off'` — свет ни на что не цепляется.
+   * Highlight driven by parent bounds (full grid/flex track, gaps included).
+   * `mode: "off"` during gutter hits so no card claims the glow.
    */
   gridSpot?: GlassGridSpot;
 };
 
-/** Плавность следования (чуть ниже — мягче инерция без «дёрганья») */
+// Spotlight follow smoothing (lower = softer inertia).
 const LERP = 0.072;
 const SNAP_PX = 0.65;
 const REST_EPS = 0.35;
@@ -31,8 +31,8 @@ function lerp(a: number, b: number, t: number) {
 }
 
 /**
- * Стеклянная пластина с едва заметным «бликом» по указателю.
- * По умолчанию — сам ловит pointer; если передан gridSpot — только он.
+ * Frosted glass panel with a subtle cursor-following sheen.
+ * Self-handles pointer by default; pass `gridSpot` when a parent grid owns hit-testing.
  */
 export function GlassSpotlightPanel({ className, children, gridSpot }: GlassSpotlightPanelProps) {
   const reduceMotion = useReducedMotion();
@@ -106,7 +106,7 @@ export function GlassSpotlightPanel({ className, children, gridSpot }: GlassSpot
   const spotXIn = spotMode === "on" && gridSpot && gridSpot.mode === "on" ? gridSpot.spot.x : 0;
   const spotYIn = spotMode === "on" && gridSpot && gridSpot.mode === "on" ? gridSpot.spot.y : 0;
 
-  /* Режим сетки: только данные из родителя (зазоры = ни одна плашка не активна) */
+  // Delegated spotlight: consume parent hit-test only (gaps ⇒ no active panel).
   useLayoutEffect(() => {
     if (!delegated || gridSpot === undefined) return;
 
@@ -137,7 +137,6 @@ export function GlassSpotlightPanel({ className, children, gridSpot }: GlassSpot
     scheduleFrame();
   }, [delegated, spotMode, spotXIn, spotYIn]);
 
-  /* Сам режим pointer */
   const onPointerEnter = () => {
     if (delegated) return;
     stopLeaveTimer();
@@ -212,7 +211,7 @@ export function GlassSpotlightPanel({ className, children, gridSpot }: GlassSpot
         "border bg-[hsl(var(--card)_/_0.38)] backdrop-blur-[22px]",
         glowOn ? "border-border/[0.52] shadow-[0_22px_48px_-44px_hsl(220_32%_4%_/_0.52)]" : "border-border/45",
         "shadow-[inset_0_1px_0_0_hsl(var(--foreground)_/_0.05)]",
-        /* Без hover-translate: долгая анимация сдвига на 1px ощущалась как «подпрыгивание». Только бордер/тень — спокойнее. */
+        /* No translate-hover: 1px shift read as jitter; border/shadow cues only. */
         "motion-safe:transition-[border-color,box-shadow] motion-safe:duration-700 motion-safe:ease-out",
         !delegated &&
           !glowOn &&
