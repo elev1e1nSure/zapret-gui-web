@@ -3,14 +3,12 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 export const AmbientBackground = () => {
   const { scrollYProgress } = useScroll();
 
-  // smooth out scroll-driven motion
   const smooth = useSpring(scrollYProgress, {
     stiffness: 60,
     damping: 20,
     mass: 0.4,
   });
 
-  // first wash — drifts down + slightly sideways, hue & opacity breathe
   const y1 = useTransform(smooth, [0, 1], ["0%", "35%"]);
   const x1 = useTransform(smooth, [0, 0.5, 1], ["-2%", "3%", "-1%"]);
   const hue1 = useTransform(smooth, [0, 1], [220, 232]);
@@ -21,7 +19,6 @@ export const AmbientBackground = () => {
       `radial-gradient(ellipse 60% 50% at 30% 30%, hsl(${h} 28% 24% / ${o}), transparent 70%)`
   );
 
-  // second wash — drifts up the other way
   const y2 = useTransform(smooth, [0, 1], ["0%", "-28%"]);
   const x2 = useTransform(smooth, [0, 0.5, 1], ["1%", "-4%", "2%"]);
   const hue2 = useTransform(smooth, [0, 1], [210, 198]);
@@ -32,7 +29,6 @@ export const AmbientBackground = () => {
       `radial-gradient(ellipse 50% 50% at 75% 60%, hsl(${h} 22% 20% / ${o}), transparent 70%)`
   );
 
-  // third subtle accent that only appears mid-scroll
   const y3 = useTransform(smooth, [0, 1], ["10%", "-15%"]);
   const op3 = useTransform(smooth, [0, 0.4, 0.7, 1], [0, 0.35, 0.3, 0]);
   const bg3 = useTransform(
@@ -75,12 +71,11 @@ export const AmbientBackground = () => {
         />
       </motion.div>
 
-      {/* fine noise to kill banding */}
       <div
         className="absolute inset-0 opacity-[0.05] mix-blend-overlay"
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+            'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'2\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")',
         }}
       />
 

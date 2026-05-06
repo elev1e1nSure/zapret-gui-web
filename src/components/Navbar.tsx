@@ -7,10 +7,14 @@ import {
   NAV_SCROLL_TOP_SHOW_PX,
   navCopy,
 } from "@/content/site-copy";
+import { useDownloadClickFeedback } from "@/hooks/use-download-click-feedback";
 import { DOWNLOAD_EXE_URL } from "@/lib/site";
 import { motionEase } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 export const Navbar = () => {
+  const { downloading: headerDownloading, onDownloadActivate: onHeaderDownloadActivate } =
+    useDownloadClickFeedback();
   const [scrolled, setScrolled] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [downloadInView, setDownloadInView] = useState(true);
@@ -112,17 +116,23 @@ export const Navbar = () => {
           <div className="relative flex h-9 min-w-[5.75rem] items-center justify-end md:col-start-3 md:justify-self-end">
             <motion.a
               href={DOWNLOAD_EXE_URL}
+              onClick={onHeaderDownloadActivate}
+              aria-busy={headerDownloading}
               initial={false}
               animate={{
                 opacity: showHeaderAside ? 1 : 0,
                 y: showHeaderAside ? 0 : -8,
               }}
               transition={{ duration: 0.42, ease: motionEase }}
-              className="absolute right-0 btn-download-fill btn-download-fill--compact btn-lift group relative isolate overflow-hidden inline-flex items-center justify-center text-sm px-4 py-2 rounded-full bg-foreground text-background font-medium whitespace-nowrap"
+              className={cn(
+                "absolute right-0 btn-download-fill btn-download-fill--compact btn-lift group relative isolate overflow-hidden inline-flex items-center justify-center text-sm px-4 py-2 rounded-full bg-foreground text-background font-medium whitespace-nowrap",
+                headerDownloading && "btn-download-fill--downloading",
+              )}
               style={{ pointerEvents: showHeaderAside ? "auto" : "none" }}
             >
               <span className="btn-download-fill__blob" aria-hidden />
               <span className="btn-download-fill__shine" aria-hidden />
+              <span className="btn-download-fill__dl-track" aria-hidden />
               <span className="relative z-10">{navCopy.headerDownload}</span>
             </motion.a>
           </div>

@@ -178,7 +178,7 @@
 .animate-float { animation: float 8s var(--ease-out) infinite; }
 .animate-breathe { animation: breathe 4s ease-in-out infinite; }
 
-/* Living ambient washes — slow, organic drift */
+/* ambient-drift: фон приложения (`AmbientBackground`) */
 @keyframes ambient-drift-1 {
   0%   { transform: translate3d(0, 0, 0) scale(1); filter: hue-rotate(0deg); }
   50%  { transform: translate3d(2%, -1.5%, 0) scale(1.06); filter: hue-rotate(8deg); }
@@ -261,9 +261,56 @@
   transform: translate3d(0, 0, 0) scale(0.97);
 }
 
+/** После клика «Скачать»: полоска снизу */
+.btn-download-fill__dl-track {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 3px;
+  border-radius: 0 0 9999px 9999px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 420ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.btn-download-fill--downloading .btn-download-fill__dl-track {
+  opacity: 1;
+  transition: opacity 280ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.btn-download-fill__dl-track::after {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 42%;
+  margin-inline-start: -42%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(210 95% 70% / 0.55),
+    hsl(210 98% 82% / 0.88),
+    hsl(210 95% 70% / 0.55),
+    transparent
+  );
+  animation: btn-download-sweep 1.15s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+
+@keyframes btn-download-sweep {
+  to {
+    transform: translateX(340%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .btn-download-fill__blob {
     transition-duration: 0.01ms;
+  }
+
+  .btn-download-fill__dl-track::after {
+    animation: none;
   }
 }
 

@@ -2,8 +2,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ChevronDown, Github, Send, Download as DownloadIcon } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
+import { useDownloadClickFeedback } from "@/hooks/use-download-click-feedback";
 import { useLatestZapretGuiVersion } from "@/hooks/use-latest-zapret-gui-version";
 import { motionEase } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 import { DOWNLOAD_EXE_URL, AUTHOR_GITHUB_URL, REPO_GUI_APP, REPO_ZAPRET_DISCORD_YT, TELEGRAM_NEWS_URL } from "@/lib/site";
 import { footerCopy, heroCopy } from "@/content/site-copy";
 import { Features } from "@/components/Features";
@@ -34,25 +36,34 @@ const heroDownloadIconClassName =
   "size-4 shrink-0 transition-transform duration-[750ms] ease-[cubic-bezier(0.25,1,0.55,1)] group-hover:-translate-y-px";
 
 const Index = () => {
+  const { downloading, onDownloadActivate } = useDownloadClickFeedback();
   const { label: releaseVersionLabel, status: releaseVersionStatus } = useLatestZapretGuiVersion();
   const heroRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: heroScrollProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const { scrollYProgress: pageScrollProgress } = useScroll();
+
+  const heroY = useTransform(heroScrollProgress, [0, 1], [0, 120]);
+  const heroOpacity = useTransform(heroScrollProgress, [0, 0.8], [1, 0]);
 
   return (
     <main className="relative min-h-screen">
+      <motion.div
+        className="pointer-events-none fixed inset-x-0 top-0 z-[51] h-0.5 w-full origin-left bg-foreground/[0.22]"
+        style={{ scaleX: pageScrollProgress }}
+        aria-hidden
+      />
+
       <Navbar />
 
       {/* HERO */}
       <section
         ref={heroRef}
-        className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-20"
+        className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-24 pb-20"
       >
-        <div className="absolute inset-0 -z-10 grid-bg opacity-50" />
+        <div className="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-50" aria-hidden />
 
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="flex flex-col items-center">
           <motion.div
@@ -94,10 +105,16 @@ const Index = () => {
             <a
               id="download"
               href={DOWNLOAD_EXE_URL}
-              className="btn-download-fill btn-lift group relative isolate overflow-hidden inline-flex items-center justify-center px-6 py-3 rounded-full bg-foreground text-background font-medium"
+              onClick={onDownloadActivate}
+              aria-busy={downloading}
+              className={cn(
+                "btn-download-fill btn-lift group relative isolate overflow-hidden inline-flex items-center justify-center px-6 py-3 rounded-full bg-foreground text-background font-medium",
+                downloading && "btn-download-fill--downloading",
+              )}
             >
               <span className="btn-download-fill__blob" aria-hidden />
               <span className="btn-download-fill__shine" aria-hidden />
+              <span className="btn-download-fill__dl-track" aria-hidden />
               <span className="relative z-10 inline-flex items-center gap-2">
                 <DownloadIcon className={heroDownloadIconClassName} strokeWidth={2} />
                 {heroCopy.downloadWindows}
