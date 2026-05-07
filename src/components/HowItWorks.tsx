@@ -60,7 +60,7 @@ export const HowItWorks = () => {
                 <div className="mb-6 leading-none tabular-nums">
                   <span
                     className="block origin-left text-7xl font-black tracking-[-0.05em] text-foreground/[0.125] md:text-8xl motion-reduce:!translate-x-0 motion-reduce:!translate-y-0 motion-reduce:!scale-100 motion-reduce:transition-colors motion-reduce:duration-300
-                      motion-safe:transition-[color,transform] motion-safe:duration-[820ms]
+                      motion-safe:transition-[color,transform] motion-safe:[transition-duration:820ms]
                       motion-safe:[transition-timing-function:cubic-bezier(0.33,1,0.32,1)]
                       motion-safe:group-hover/step:translate-x-1.5 motion-safe:group-hover/step:-translate-y-1
                       group-hover/step:text-foreground/[0.24] motion-safe:group-hover/step:scale-[1.04]"
