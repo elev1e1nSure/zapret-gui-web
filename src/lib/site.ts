@@ -1,6 +1,6 @@
-/** Direct link to the latest Windows build (GitHub Releases). */
+/** Latest release page — user picks the correct asset (exe/msi). */
 export const DOWNLOAD_EXE_URL =
-  "https://github.com/elev1e1nSure/zapret-gui/releases/latest/download/zapret-gui.exe";
+  "https://github.com/elev1e1nSure/zapret-gui/releases/latest";
 
 /** Desktop GUI (Tauri) app repository. */
 export const REPO_GUI_APP = "https://github.com/elev1e1nSure/zapret-gui";
